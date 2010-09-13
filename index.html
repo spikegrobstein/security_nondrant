@@ -1,0 +1,37 @@
+<html>  
+ <head>
+	<link rel="stylesheet" href="style.css" type="text/css" media="screen" title="no title" charset="utf-8">
+	<script src="jquery-1.4.2.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="security_pattern.js" type="text/javascript" charset="utf-8"></script>
+	
+  <script type="application/javascript">
+		var s;
+
+		$(document).ready(function() {
+			s = new SecurityPattern($("#security_pattern"), sp_callback);
+			s.init();
+		});
+		
+		function sp_callback(code) {
+			alert(code.join(''));
+		}
+
+  </script>  
+
+</head>  
+<body>
+	
+	<div id="iphone_size">
+		<div id="info">
+			<span id="info_x">x</span>
+			<span id="info_y">y</span>
+			<span id="info_aux">aux</span>
+		</div>
+	
+		<canvas id="security_pattern" width="220" height="220"></canvas>
+		
+		<div id="n_info">X</div>  
+	</div>
+	
+</body>  
+</html>
