@@ -5,11 +5,11 @@
 	<script src="security_pattern.js" type="text/javascript" charset="utf-8"></script>
 	
   <script type="application/javascript">
-		var s;
+		var sn;
 
 		$(document).ready(function() {
-			s = new SecurityPattern($("#security_pattern"), sp_callback);
-			s.init();
+			sn = new SecurityNondrant($("#security_pattern"), sp_callback);
+			sn.init();
 		});
 		
 		function sp_callback(code) {
