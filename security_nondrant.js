@@ -99,9 +99,7 @@ SecurityNondrant.prototype.initialize_events = function() {
 */
 SecurityNondrant.prototype.render = function() {
 	this.render_background();
-	
-	this.render_first(); // render the first-selected square
-	
+		
 	// set up basic context shit.
 	this.context.lineWidth = 1.0;
 	this.context.lineJoin = 'butt';
@@ -125,6 +123,11 @@ SecurityNondrant.prototype.render = function() {
 
 SecurityNondrant.prototype.render_nondrant = function(n) {
 	var nondrant_info = this.nondrant_offset(n);
+	
+	if (this.code.length > 0 && n == this.code[0]) {
+		this.context.fillStyle = 'rgb(255,255,0)';
+		this.context.fillRect(nondrant_info.x, nondrant_info.y, nondrant_info.w, nondrant_info.h);
+	}
 	
 	// draw the start region
 	this.context.strokeStyle = 'rgb(0,0,255)';
@@ -172,18 +175,6 @@ SecurityNondrant.prototype.render_background = function() {
 	
 	this.context.stroke();
 	this.context.closePath();
-};
-
-/*
-**	this draws the nondrant of the first digit in the security code a little differently to highlight it.
-*/
-SecurityNondrant.prototype.render_first = function() {
-	if (this.code.length == 0) { return; }
-	
-	var nondrant = this.nondrant_offset(this.code[0]);
-	
-	this.context.fillStyle = 'rgb(255,255,0)';
-	this.context.fillRect(nondrant.x, nondrant.y, nondrant.w, nondrant.h);
 };
 
 /*
