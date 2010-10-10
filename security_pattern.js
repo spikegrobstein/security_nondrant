@@ -177,7 +177,7 @@ SecurityNondrant.prototype.render_background = function() {
 };
 
 /*
-**	right now, we draw the first nondrant a little differently. could change in the future.
+**	this draws the nondrant of the first digit in the security code a little differently to highlight it.
 */
 SecurityNondrant.prototype.render_first = function() {
 	if (this.code.length == 0) { return; }
