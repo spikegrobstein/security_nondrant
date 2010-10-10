@@ -21,6 +21,8 @@ var SecurityNondrant = function(element, callback, options) {
 	this.read_option(options, 'start_region_size', 0.9);		// finger must be in a start_region to initiate input
 	this.read_option(options, 'waypoint_region_size', 0.5);	// finger must be in a waypoint region to trigger that nondrant
 	
+	this.init();
+	
 	return this;
 }
 
