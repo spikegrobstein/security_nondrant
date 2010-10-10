@@ -1,4 +1,4 @@
-var SecurityNondrant = function(element, callback) {
+var SecurityNondrant = function(element, callback, options) {
 	this.element = element[0]; // the element that we're drawing to (canvas)
 	this.callback = callback; // the callback that will be provided the input code as an array of ints 0-8
 	
@@ -17,9 +17,18 @@ var SecurityNondrant = function(element, callback) {
 	
 	this.render_cache = null; // the cache for storing the image data for faster drawing
 	
+	// read the options
+	if (options) {
+		this.read_option('background_color', options['background_color'], 'rgb(0,0,0)');
+		this.read_option('render_nondrant', options['render_nondrant'], this.render_nondrant);
+	}
+	
 	return this;
 }
 
+SecurityNondrant.prototype.read_option = function(property, option, default_value) {
+  this[property] = option ? option : default_value;
+}
 
 		
 /*
@@ -104,25 +113,7 @@ SecurityNondrant.prototype.render = function() {
 	// the box in the middle or whatever.
 	// currently, it draws the regions
 	for (var i = 0; i < 9; i++) {
-		var nondrant_info = this.nondrant_offset(i);
-		
-		// draw the start region
-		this.context.strokeStyle = 'rgb(0,0,255)';
-		this.context.strokeRect(
-			nondrant_info.origin_x - Math.floor((nondrant_info.w * this.start_region_size) / 2),
-			nondrant_info.origin_y - Math.floor((nondrant_info.h * this.start_region_size) / 2),
-			Math.floor(nondrant_info.w * this.start_region_size),
-			Math.floor(nondrant_info.h * this.start_region_size)
-		);
-
-		// draw the waypoint region
-		this.context.strokeStyle = 'rgb(0, 255, 255)';
-		this.context.strokeRect(
-			nondrant_info.origin_x - Math.floor((nondrant_info.w * this.waypoint_region_size) / 2),
-			nondrant_info.origin_y - Math.floor((nondrant_info.h * this.waypoint_region_size) / 2),
-			Math.floor(nondrant_info.w * this.waypoint_region_size),
-			Math.floor(nondrant_info.h * this.waypoint_region_size)
-		);
+		this.render_nondrant(i);
 	}
 	
 	this.render_lines();
@@ -134,13 +125,36 @@ SecurityNondrant.prototype.render = function() {
 	this.render_cache = this.context.getImageData(0, 0, this.w, this.h);		
 };
 
+SecurityNondrant.prototype.render_nondrant = function(n) {
+	var nondrant_info = this.nondrant_offset(n);
+	
+	// draw the start region
+	this.context.strokeStyle = 'rgb(0,0,255)';
+	this.context.strokeRect(
+		nondrant_info.origin_x - Math.floor((nondrant_info.w * this.start_region_size) / 2),
+		nondrant_info.origin_y - Math.floor((nondrant_info.h * this.start_region_size) / 2),
+		Math.floor(nondrant_info.w * this.start_region_size),
+		Math.floor(nondrant_info.h * this.start_region_size)
+	);
+
+	// draw the waypoint region
+	this.context.strokeStyle = 'rgb(0, 255, 255)';
+	this.context.strokeRect(
+		nondrant_info.origin_x - Math.floor((nondrant_info.w * this.waypoint_region_size) / 2),
+		nondrant_info.origin_y - Math.floor((nondrant_info.h * this.waypoint_region_size) / 2),
+		Math.floor(nondrant_info.w * this.waypoint_region_size),
+		Math.floor(nondrant_info.h * this.waypoint_region_size)
+	);
+
+}
+
 /*
 **	render the basic background
 **	fill with black and draw lines
 */
 SecurityNondrant.prototype.render_background = function() {
 	this.context.beginPath();
-	this.context.fillStyle = 'rgb(0,0,0)';
+	this.context.fillStyle = this.background_color;
 	this.context.fillRect(0, 0, this.w, this.h);
 
 	this.context.strokeStyle = 'rgba(255,255,255,1.0)';
