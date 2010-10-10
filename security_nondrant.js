@@ -1,6 +1,6 @@
 var SecurityNondrant = function(element, callback, options) {
 	this.element = element[0]; // the element that we're drawing to (canvas)
-	this.callback = callback; // the callback that will be provided the input code as an array of ints 0-8
+	this.callback = callback; // the callback that will be provided the input code as an array of ints 0-8 when code input is complete
 	
 	this.context = null; // the drawing context
 	
@@ -14,17 +14,17 @@ var SecurityNondrant = function(element, callback, options) {
 	this.render_cache = null; // the cache for storing the image data for faster drawing
 	
 	// read the options/set default values
-	this.read_option('background_color', options, 'rgb(0,0,0)');
-	this.read_option('render_nondrant', options, this.render_nondrant);
+	this.read_option(options, 'background_color', 'rgb(0,0,0)');
+	this.read_option(options, 'render_nondrant', this.render_nondrant);
 	
 	// region sizes in ratio (1.0 == 100%, 0.9 == 90%, etc)
-	this.read_option('start_region_size', options, 0.9);		// finger must be in a start_region to initiate input
-	this.read_option('waypoint_region_size', options, 0.5);	// finger must be in a waypoint region to trigger that nondrant
+	this.read_option(options, 'start_region_size', 0.9);		// finger must be in a start_region to initiate input
+	this.read_option(options, 'waypoint_region_size', 0.5);	// finger must be in a waypoint region to trigger that nondrant
 	
 	return this;
 }
 
-SecurityNondrant.prototype.read_option = function(property, options, default_value) {
+SecurityNondrant.prototype.read_option = function(options, property, default_value) {
   this[property] = (options && options[property]) ? options[property] : default_value;
 }
 
