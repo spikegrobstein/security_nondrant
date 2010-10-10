@@ -8,8 +8,18 @@
 		var sn;
 
 		$(document).ready(function() {
-			sn = new SecurityNondrant($("#security_pattern"), sp_callback, { background_color: 'rgb(0,100,0)' });
-			sn.init();
+			sn = new SecurityNondrant($("#security_pattern"), sp_callback, 
+			  { 
+			    background_color: 'rgb(0,100,0)',
+			    
+			    render_nondrant: function(n) {
+			      var nondrant_info = this.nondrant_offset(n);
+          	var nondrant_image = $('#nondrant_idle')[0];
+          	
+          	this.context.drawImage(nondrant_image, nondrant_info.origin_x - nondrant_image.width / 2, nondrant_info.origin_y - nondrant_image.height / 2);
+			    }
+			  }
+			);
 		});
 		
 		function sp_callback(code) {
@@ -31,6 +41,9 @@
 		<canvas id="security_pattern" width="220" height="220"></canvas>
 		
 		<div id="n_info">X</div>  
+		<div style="display: block;">
+		  <img id="nondrant_idle" src="img/nondrant_idle.png" />
+		</div>
 	</div>
 	
 </body>  
