@@ -116,7 +116,11 @@ window.requestAnimFrame = function(){
       event.preventDefault();
       // TODO: fire off event that input ended
       // this.handleInteraction( 'end', { x: null, y: null } );
-      alert(this.code());
+      this.fingerDown = false;
+      this.code = this._code();
+      this.resetState();
+
+      this.triggerCallback( 'onCode', this.code );
     }.bind(this), false );
 
     this.ele.addEventListener( 'touchmove', function( event ) {
@@ -134,7 +138,10 @@ window.requestAnimFrame = function(){
     this.ele.addEventListener( 'mouseup', function( event ) {
       event.preventDefault();
       this.fingerDown = false;
-      alert(this.code());
+      this.code = this._code();
+      this.resetState();
+
+      this.triggerCallback( 'onCode', this.code );
       // TODO: fire off event that the user finished
       // this.handleInteraction( 'end', { x: null, y: null } );
     }.bind(this), false );
@@ -146,7 +153,16 @@ window.requestAnimFrame = function(){
     }.bind(this), false );
   };
 
-  Nondrant.prototype.code = function() {
+  Nondrant.prototype.triggerCallback = function() {
+    var args = Array.prototype.slice.apply( arguments ),
+        callback = args.shift();
+
+    if ( typeof this[callback] === 'function' ) {
+      this[callback].apply( this, args );
+    }
+  }
+
+  Nondrant.prototype._code = function() {
     var i, c = [];
     for ( i in this.currentState ) {
       c.push( this.currentState[i] );

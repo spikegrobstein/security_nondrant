@@ -24,6 +24,10 @@
 <script>
   var c = document.getElementsByTagName('canvas')[0];
   var n = new Nondrant(c);
+
+  n.onCode = function( code ) {
+    alert("Got code: " + code);
+  }
 </script>
 </body>
 </html>
