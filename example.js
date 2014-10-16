@@ -112,7 +112,7 @@ window.requestAnimFrame = function(){
 
     this.ele.addEventListener( 'touchmove', function( event ) {
       event.preventDefault();
-      this.handleInteraction( 'move', { x: event.touches[0].clientX, y: event.touches[0].clientY } );
+      this.handleInteraction( 'move', { x: event.touches[0].layerX, y: event.touches[0].layerY} );
     }.bind(this), false );
 
     this.ele.addEventListener( 'mousedown', function( event ) {
@@ -136,7 +136,7 @@ window.requestAnimFrame = function(){
     this.ele.addEventListener( 'mousemove', function( event ) {
       event.preventDefault();
       if ( ! this.fingerDown ) { return; }
-      this.handleInteraction( 'move', { x: event.clientX, y: event.clientY } );
+      this.handleInteraction( 'move', { x: event.layerX, y: event.layerY} );
     }.bind(this), false );
   };
 
