@@ -17,6 +17,7 @@ window.requestAnimFrame = function(){
     this.backgroundColor = '#6666bb';
     this.nubColor = '#6666aa';
 
+    this.threshold = 0.5; // the ratio of the touch size radius to the section
 
     this.ele = ele;
     this.realCtx = this.ele.getContext('2d');
@@ -26,7 +27,6 @@ window.requestAnimFrame = function(){
 
     this.width = this.ele.offsetWidth;
     this.height = this.ele.offsetHeight;
-
 
     this.fingerDown = false;
     this.currentPoint = null;
@@ -167,7 +167,7 @@ window.requestAnimFrame = function(){
         pressed: false,
         x: ( this.width / 6 + this.width / 3 * ( i % 3 ) ),
         y: ( this.height / 6 + this.height / 3 * Math.trunc( i / 3 ) ),
-        threshold: this.width / 12 // 50% coverage
+        threshold: this.width / 6 * this.threshold // the size of the press area
       };
 
       this.buttons.push( button );
