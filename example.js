@@ -107,27 +107,32 @@ window.requestAnimFrame = function(){
 
   Nondrant.prototype.initializeEvents = function() {
     this.ele.addEventListener( 'touchstart', function( event ) {
+      event.preventDefault();
       // TODO: fire off event that input started
       // this.handleInteraction( 'start', { x: event.touches[0].clientX, y: event.touches[0].clientY } );
     }.bind(this), false );
 
     this.ele.addEventListener( 'touchend', function( event ) {
+      event.preventDefault();
       // TODO: fire off event that input ended
       // this.handleInteraction( 'end', { x: null, y: null } );
       alert(this.code());
     }.bind(this), false );
 
     this.ele.addEventListener( 'touchmove', function( event ) {
+      event.preventDefault();
       this.handleInteraction( 'move', { x: event.touches[0].clientX, y: event.touches[0].clientY } );
     }.bind(this), false );
 
     this.ele.addEventListener( 'mousedown', function( event ) {
+      event.preventDefault();
       this.fingerDown = true;
       // TODO: fire off event that the user started
       // this.handleInteraction( 'down', { x: event.clientX, y: event.clientY } );
     }.bind(this), false );
 
     this.ele.addEventListener( 'mouseup', function( event ) {
+      event.preventDefault();
       this.fingerDown = false;
       alert(this.code());
       // TODO: fire off event that the user finished
@@ -135,6 +140,7 @@ window.requestAnimFrame = function(){
     }.bind(this), false );
 
     this.ele.addEventListener( 'mousemove', function( event ) {
+      event.preventDefault();
       if ( ! this.fingerDown ) { return; }
       this.handleInteraction( 'move', { x: event.clientX, y: event.clientY } );
     }.bind(this), false );
