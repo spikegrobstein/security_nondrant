@@ -91,20 +91,6 @@ window.requestAnimFrame = function(){
     return this.buttons[this.currentState[this.currentState.length - 1]];
   }
 
-  // callbacks
-  // onStart -- finger hits, process starts
-  // onFinish -- finger is lifted, passes code
-  // onInput -- each time a new value is added
-  Nondrant.prototype.onStart = function( callback ) {
-    this.doOnStart = callback;
-  };
-  Nondrant.prototype.onFinish = function( callback ) {
-    this.doOnFinish = callback;
-  };
-  Nondrant.prototype.onInput = function( callback ) {
-    this.doOnInput = callback;
-  };
-
   Nondrant.prototype.initializeEvents = function() {
     this.ele.addEventListener( 'touchstart', function( event ) {
       event.preventDefault();
