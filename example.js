@@ -46,10 +46,10 @@ window.requestAnimFrame = function(){
     window.requestAnimFrame( this.drawLoop.bind(this) );
   }
 
-  Nondrant.prototype.draw = function() {
+  Nondrant.prototype.draw = function( justRefresh ) {
     this.realCtx.drawImage( this.offscreenImage, 0, 0, this.width, this.height );
 
-    if ( ! this.lastButton() ) { return; }
+    if ( justRefresh || ! this.lastButton() ) { return; }
 
     this.realCtx.beginPath();
     this.realCtx.moveTo( this.lastButton().x, this.lastButton().y );
@@ -108,6 +108,7 @@ window.requestAnimFrame = function(){
   Nondrant.prototype.initializeEvents = function() {
     this.ele.addEventListener( 'touchstart', function( event ) {
       event.preventDefault();
+      this.fingerDown = true;
       // TODO: fire off event that input started
       // this.handleInteraction( 'start', { x: event.touches[0].clientX, y: event.touches[0].clientY } );
     }.bind(this), false );
@@ -193,6 +194,9 @@ window.requestAnimFrame = function(){
       i = this.buttons[i];
       i.pressed = false;
     }
+
+    this.initializeOffscreenImage();
+    this.draw(true);
 
     this.currentState = [];
   }
