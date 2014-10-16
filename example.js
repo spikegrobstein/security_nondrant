@@ -13,27 +13,20 @@ window.requestAnimFrame = function(){
 
 (function( window, document ) {
   var Nondrant = function( ele ) {
+    this.lineColor = '#3333bb';
+    this.backgroundColor = '#6666bb';
+    this.nubColor = '#6666aa';
+
+
     this.ele = ele;
     this.realCtx = this.ele.getContext('2d');
-    this.realCtx.strokeStyle = '#00ff00';
+    this.realCtx.strokeStyle = this.lineColor;
     this.realCtx.lineCap = "round";
     this.realCtx.lineWidth = "4";
 
     this.width = this.ele.offsetWidth;
     this.height = this.ele.offsetHeight;
 
-    // init image
-    this.offscreenImage = document.createElement('canvas');
-    this.offscreenImage.width = this.width;
-    this.offscreenImage.height = this.height;
-    this.ctx = this.offscreenImage.getContext('2d');
-    this.ctx.fillStyle = '#6666bb';
-    this.ctx.fillRect(0, 0, this.width, this.height);
-
-    // pen style
-    this.ctx.strokeStyle = '#00ff00';
-    this.ctx.lineCap = "round";
-    this.ctx.lineWidth = "4";
 
     this.fingerDown = false;
     this.currentPoint = null;
@@ -43,6 +36,7 @@ window.requestAnimFrame = function(){
 
     this.initializeButtons();
     this.initializeEvents();
+    this.initializeOffscreenImage();
     this.drawLoop();
   };
 
@@ -57,10 +51,40 @@ window.requestAnimFrame = function(){
 
     if ( ! this.lastButton() ) { return; }
 
+    this.realCtx.beginPath();
     this.realCtx.moveTo( this.lastButton().x, this.lastButton().y );
     this.realCtx.lineTo( this.currentPoint.x, this.currentPoint.y );
 
     this.realCtx.stroke();
+  }
+
+  Nondrant.prototype.initializeOffscreenImage = function() {
+    var b;
+
+    // init image
+    this.offscreenImage = document.createElement('canvas');
+    this.offscreenImage.width = this.width;
+    this.offscreenImage.height = this.height;
+
+    this.ctx = this.offscreenImage.getContext('2d');
+    this.ctx.fillStyle = this.backgroundColor;
+    this.ctx.fillRect(0, 0, this.width, this.height);
+
+    this.ctx.lineCap = "round";
+    this.ctx.lineWidth = "4";
+
+    this.ctx.fillStyle = this.nubColor;
+    // draw the circles
+    for ( b in this.buttons ) {
+      b = this.buttons[b];
+      this.ctx.beginPath();
+      this.ctx.arc(b.x, b.y, b.threshold, 0, 2 * Math.PI, true);
+      this.ctx.fill();
+    }
+
+    // pen style
+    this.ctx.strokeStyle = this.lineColor;
+
   }
 
   Nondrant.prototype.lastButton = function() {
@@ -90,6 +114,7 @@ window.requestAnimFrame = function(){
     this.ele.addEventListener( 'touchend', function( event ) {
       // TODO: fire off event that input ended
       // this.handleInteraction( 'end', { x: null, y: null } );
+      alert(this.code());
     }.bind(this), false );
 
     this.ele.addEventListener( 'touchmove', function( event ) {
@@ -104,6 +129,7 @@ window.requestAnimFrame = function(){
 
     this.ele.addEventListener( 'mouseup', function( event ) {
       this.fingerDown = false;
+      alert(this.code());
       // TODO: fire off event that the user finished
       // this.handleInteraction( 'end', { x: null, y: null } );
     }.bind(this), false );
@@ -113,6 +139,15 @@ window.requestAnimFrame = function(){
       this.handleInteraction( 'move', { x: event.clientX, y: event.clientY } );
     }.bind(this), false );
   };
+
+  Nondrant.prototype.code = function() {
+    var i, c = [];
+    for ( i in this.currentState ) {
+      c.push( this.currentState[i] );
+    }
+
+    return c.join('');
+  }
 
   Nondrant.prototype.initializeButtons = function() {
     var i = 0;
@@ -168,20 +203,20 @@ window.requestAnimFrame = function(){
 
     button.pressed = true;
 
-    b = this.lastButton();
+    b = this.currentState[0];
     this.currentState.push(button.id);
 
     if ( this.currentState.length == 1 ) { return; }
 
+    this.ctx.beginPath();
     this.ctx.moveTo( b.x, b.y );
 
     for ( b in this.currentState ) {
       b = this.buttons[this.currentState[b]];
 
       this.ctx.lineTo( b.x, b.y );
-      this.ctx.moveTo( b.x, b.y );
-      this.ctx.stroke();
     }
+      this.ctx.stroke();
 
 
     console.log( "Just pressed button: " + button.id );
