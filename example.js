@@ -112,7 +112,7 @@ window.requestAnimFrame = function(){
 
     this.ele.addEventListener( 'touchmove', function( event ) {
       event.preventDefault();
-      this.handleInteraction( 'move', { x: event.touches[0].layerX, y: event.touches[0].layerY} );
+      this.handleInteraction( 'move', { x: event.touches[0].clientX - event.target.offsetLeft, y: event.touches[0].clientY - event.target.offsetTop } );
     }.bind(this), false );
 
     this.ele.addEventListener( 'mousedown', function( event ) {
